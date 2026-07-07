@@ -81,6 +81,7 @@
     display: block;
     filter: saturate(1.08) contrast(1.03);
     cursor: zoom-in;
+    transform: scale(1.14);
   }
 
   .lightbox {
@@ -98,12 +99,20 @@
     display: flex;
   }
 
-  .lightbox img {
-    max-width: 90vw;
-    max-height: 90vh;
+  .lightbox-frame {
+    display: inline-block;
     border-radius: 10px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    overflow: hidden;
+    line-height: 0;
+  }
+
+  .lightbox img {
+    display: block;
+    max-width: 90vw;
+    max-height: 90vh;
     cursor: zoom-out;
+    transform: scale(1.14);
   }
 </style>
 </head>
@@ -116,7 +125,9 @@
 <div class="gallery" id="gallery"></div>
 
 <div class="lightbox" id="lightbox">
-  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-frame">
+    <img id="lightbox-img" src="" alt="">
+  </div>
 </div>
 
 <script>
