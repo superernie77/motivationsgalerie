@@ -80,13 +80,30 @@
     object-fit: cover;
     display: block;
     filter: saturate(1.08) contrast(1.03);
+    cursor: zoom-in;
   }
 
-  footer {
-    text-align: center;
-    margin-top: 40px;
-    opacity: 0.6;
-    font-size: 0.85rem;
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 40px;
+  }
+
+  .lightbox.open {
+    display: flex;
+  }
+
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    cursor: zoom-out;
   }
 </style>
 </head>
@@ -98,7 +115,9 @@
 
 <div class="gallery" id="gallery"></div>
 
-<footer>Bilder via LoremFlickr &middot; zum privaten Gebrauch</footer>
+<div class="lightbox" id="lightbox">
+  <img id="lightbox-img" src="" alt="">
+</div>
 
 <script>
   const themes = [
@@ -129,6 +148,8 @@
   ];
 
   const gallery = document.getElementById('gallery');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
 
   themes.forEach(([tags, label], i) => {
     const card = document.createElement('div');
@@ -138,14 +159,28 @@
     img.loading = 'lazy';
     img.alt = label;
     img.src = `https://loremflickr.com/640/480/${tags}?lock=${i + 1}`;
-
-    const lbl = document.createElement('div');
-    lbl.className = 'label';
-    lbl.textContent = label;
+    img.addEventListener('click', () => {
+      lightboxImg.src = img.src;
+      lightboxImg.alt = img.alt;
+      lightbox.classList.add('open');
+    });
 
     card.appendChild(img);
-    card.appendChild(lbl);
     gallery.appendChild(card);
+  });
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) {
+      lightbox.classList.remove('open');
+      lightboxImg.src = '';
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      lightbox.classList.remove('open');
+      lightboxImg.src = '';
+    }
   });
 </script>
 
